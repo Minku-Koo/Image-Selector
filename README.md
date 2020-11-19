@@ -2,6 +2,7 @@
 **Image Selector Programm used PyQt5 GUI**
 
 
+
 * Project Name : Image Selector Program
 * Create Date : 22/Nov/2020
 * Author : Minkuk Koo
@@ -10,14 +11,18 @@
 * Keyword : 'PyQt5', 'Python', 'GUI', 'UI', 'Image', 'Selector', 'Pyside2'
 
 
+
+
 > Choose the folder that has image file like .png, .jpg
 
 > Select Image, Correct or Incorrect.
 
 
-1. When you classify image for getting data, you can use this usefully.
 
-2. Also, you can use these image data for AI.
+
+* When you classify image for getting data, you can use this usefully.
+
+* Also, you can use these image data for AI.
 
 ----------------------------------------------------------------
 ----------------------------------------------------------------
