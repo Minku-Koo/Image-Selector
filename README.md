@@ -15,9 +15,9 @@
 > Select Image, Correct or Incorrect.
 
 
-- When you classify image for getting data, you can use this usefully.
+1. When you classify image for getting data, you can use this usefully.
 
-- Also, you can use these image data for AI.
+2. Also, you can use these image data for AI.
 
 ----------------------------------------------------------------
 ----------------------------------------------------------------
