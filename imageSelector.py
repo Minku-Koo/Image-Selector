@@ -182,14 +182,14 @@ class ImageSelector(QWidget):
             buttonReply = QMessageBox()
             buttonReply.setIcon(QMessageBox.Question)
             buttonReply.setWindowTitle('Warning!!')
-            buttonReply.setText('분류하지 않은 파일이 존재합니다.')
+            buttonReply.setText('Unclassified file exist')
             buttonReply.setStandardButtons(QMessageBox.Yes|QMessageBox.Reset|QMessageBox.Save)#|QMessageBox.No)
             button1 = buttonReply.button(QMessageBox.Yes)
-            button1.setText('미분류 파일 모두 Correct')
+            button1.setText('Unclassified file to Correct')
             button2 = buttonReply.button(QMessageBox.Reset)
-            button2.setText('작업 되돌아가기')
+            button2.setText('Back to WorkSpace')
             button3 = buttonReply.button(QMessageBox.Save)
-            button3.setText('미분류 파일 모두 Inorrect')
+            button3.setText('Unclassified file to Inorrect')
             buttonReply.exec_()
             
             if buttonReply.clickedButton() == button3: #모두 Incorrect
@@ -217,7 +217,7 @@ class ImageSelector(QWidget):
             # 파일 이동
             self.moveImageFile(correct, incorrect)
             # New MessageBox Open
-            nextStep = QMessageBox.question(self, 'Warning!!', "계속 작업을 진행하시겠습니까?", QMessageBox.Yes | QMessageBox.No)
+            nextStep = QMessageBox.question(self, 'Warning!!', "Keep Working?", QMessageBox.Yes | QMessageBox.No)
             
             # Keep Working
             if nextStep== QMessageBox.Yes: self.changeDirFunc()
@@ -351,7 +351,7 @@ class ImageSelector(QWidget):
     # make GUI
     def initUI(self): # main user interface 
         self.setWindowTitle('Image Selector') #GUI Title
-        self.setWindowIcon(QIcon('--.PNG')) #set Icon File, 16x16, PNG file
+        self.setWindowIcon(QIcon('logo.PNG')) #set Icon File, 16x16, PNG file
         self.showCenter() #GUI position on window center 화면 중앙에 배치 
         self.setStyleSheet("background-color:white;") #배경색 설정
         
@@ -370,7 +370,7 @@ class ImageSelector(QWidget):
         lb_title.setAlignment(QtCore.Qt.AlignCenter) # text on center
         
         # directory path text 초기화
-        self.dir_text = QLabel("작업할 폴더를 선택해주세요.", self)
+        self.dir_text = QLabel("Select Directory, first", self)
         self.dir_text.setFont(QFont(self.fontName,11))
         self.dir_text.setAlignment(QtCore.Qt.AlignCenter)
         
