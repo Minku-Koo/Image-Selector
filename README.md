@@ -1,28 +1,29 @@
 # Image-Selector
-**Image Selector Programm used PyQt5 GUI**
+## Image Selector Program used PyQt5 GUI
+
+------------------------------------------------------------------------------
 
 
-
-* Project Name : Image Selector Program
-* Create Date : 22/Nov/2020
+* Project Name : Image File Selector (for make image Data-Set)
+* Created Date : 26/Dec/2020
+* Updated Date : 27/Dec/2020
 * Author : Minkuk Koo
 * E-Mail : corleone@kakao.com
-* Version : 1.0.0
-* Keyword : 'PyQt5', 'Python', 'GUI', 'UI', 'Image', 'Selector', 'Pyside2'
+* Version : 1.0.1
+* Keyword : 'PyQt5', 'Python', 'image', 'viewer', 'big data', 'gui', 'selector', 'classify'
+
+<br>
+
+- How to use?
+  > Select directory (Work Place)<br>
+  > Classifying files on selected directory, correct or incorrect
+
+- it can Help you like this..
+  > When you classify image for getting data, you can use this usefully.<br>
+  > Also, you can use these image data for AI.
+
+<br>
+
+------------------------------------------------------------------------------
 
 
-
-
-> Choose the folder that has image file like .png, .jpg
-
-> Select Image, Correct or Incorrect.
-
-
-
-
-* When you classify image for getting data, you can use this usefully.
-
-* Also, you can use these image data for AI.
-
-----------------------------------------------------------------
-----------------------------------------------------------------
