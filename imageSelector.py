@@ -1,4 +1,4 @@
-﻿
+﻿# -*- conding: utf-8 -*-
 '''
 # python
 
