@@ -40,8 +40,8 @@ class ImageSelector(QWidget):
         # GUI 높이/길이
         self.HEIGHT = 800
         self.WIDTH = 800 * 2
-        
-        self.setFixedSize(self.WIDTH, self.HEIGHT) #높이 길이 설정
+        self.resize(self.WIDTH, self.HEIGHT)
+        # self.setFixedSize(self.WIDTH, self.HEIGHT) #높이 길이 설정
         self.dir_path = "" #작업 디렉토리 선언
         self.img_list=[] #이미지 파일 리스트
         self.file_extension = ["jpg","jpeg","png"] #작업 가능한 파일 확장자
@@ -75,28 +75,12 @@ class ImageSelector(QWidget):
         widget.installEventFilter(filter)
         return filter.clicked
    
-    # 라벨(파일 이름) 클릭 시, 이미지 팝업창 생성
-    def showImagePopUp1(self, path): #Parameter: Image Path<String> 
-        if self.imageWindow is not None: # 기존에 켜져있는 경우
-            self.imageWindow =None #종료
-            
-        location =self.pos() #현재 GUI 위치 Now GUI Position
-        imagePath = self.dir_path+"/"+path #클릭 이미지 경로 Clicked Image Path
-        if self.imageWindow is None:
-            # 이미지 팝업 윈도우 새로 열기 Image Pop Up Window New Open
-            # Parameter: image path<String>, GUI Width<int>, GUI Location X Value<int>, GUI Location Y Value<int>
-            self.imageWindow = ImageShowWindow(imagePath, self.WIDTH, location.x(), location.y())
-            
-        self.imageWindow.show() #이미지 팝업 보여주기 
-        return 0
-    
-    def showImagePopUp(self, path):
-        self.image_path.setText(path)
-        self.image_path.setFont(QFont(self.fontName, 10))
-        
+    # file name clieck -> image show 이미지 클릭하면 이미지 보여줌
+    def showImageViewer(self, path):
+        self.image_path.setText(path) # 파일 이름 설정
         myPixmap = QPixmap(self.dir_path+"/"+path) # get Image File
         myScaledPixmap = myPixmap.scaled(self.viewer.size(), Qt.KeepAspectRatio)
-        self.viewer.setPixmap(myScaledPixmap)
+        self.viewer.setPixmap(myScaledPixmap) # show image
     
     # RadioButton 전체 Correct로 선택 
     def AllRadioSelectCorrect(self):
@@ -258,7 +242,7 @@ class ImageSelector(QWidget):
             
         for file in self.fileDict.keys(): # All Image File Name
              #클릭하면 함수 실행 / FileName Label Click -> Image Viewer Window 실행
-            self.clickable(self.fileDict[file]).connect(lambda f=file:self.showImagePopUp(f))
+            self.clickable(self.fileDict[file]).connect(lambda f=file:self.showImageViewer(f))
             # MouseOver  on File Name Label -> Change Cursor to Hand Shape 마우스 커서 손모양으로 변경
             self.fileDict[file].setCursor(QCursor(Qt.PointingHandCursor))
             
@@ -537,23 +521,22 @@ class ImageSelector(QWidget):
         """
         ------------  set Final Layout / 최종 레이아웃 설정  -------------
         """
-        # main Layout 
+        #    Image Viewer     이미지 뷰어 
         self.imageBoxLayout = QVBoxLayout()
         self.view_layout = QVBoxLayout()
-        self.image_path = QLabel("path..")
+        # file name / 파일 이름 초기화
+        self.image_path = QLabel("Image Viewer, File Path will be showed here")
         self.viewer = QLabel()
         self.viewer.setAlignment(QtCore.Qt.AlignCenter)
-        self.viewer.setFixedSize( int(self.WIDTH/2),600) # window size
-        self.view_layout.addWidget(self.image_path)
-        self.view_layout.addWidget(self.viewer)
-        
-        
-        # self.setFixedSize(600,600) # set Window Size
+        self.viewer.resize( int(self.WIDTH/2),700) # image size
+        # self.viewer.setFixedSize( int(self.WIDTH/2),700) # window size
+        self.view_layout.addWidget(self.image_path, 1)
+        self.view_layout.addWidget(self.viewer,6)
+        self.image_path.setFont(QFont(self.fontName, 13))
         self.imageBoxLayout.addLayout(self.view_layout)
         
-        
+        # main Layout 
         self.mainLayout = QVBoxLayout()
-        # self.mainLayout.setFixedWidth(WIDTH/2)
         self.mainLayout.addLayout(lb_head)
         self.mainLayout.addWidget(self.imageScroll)
         self.mainLayout.addLayout(self.lb_bottom)
@@ -561,36 +544,11 @@ class ImageSelector(QWidget):
         
         self.allLayout = QHBoxLayout()
         self.allLayout.addLayout(self.imageBoxLayout, 5)
-        self.allLayout.addLayout(self.mainLayout, 2)
+        self.allLayout.addLayout(self.mainLayout, 3)
         self.setLayout(self.allLayout) 
-        #self.setLayout(self.mainLayout) #main layout
         
         self.show() # show GUI
         
-    
-
-
-# Image File Viewer Window, like Pop Up / 이미지 보여주는 별도의 창 생성
-class ImageShowWindow(QWidget):
-    # Parameter: file path 파일 경로<string>, gui width 기존 창 넓이<int>, gui x position 기존 창 x 값<int>, gui y position 기존 창 y 값<int>
-    def __init__(self, path, parent_width, x, y):
-        super().__init__()
-        self.setWindowTitle('Image Viewer') #image Viewer Title
-        
-        layout = QVBoxLayout()
-        self.viewer = QLabel()
-        self.viewer.setAlignment(QtCore.Qt.AlignCenter)
-        self.viewer.setFixedSize(570,570) # window size
-        layout.addWidget(self.viewer)
-        
-        myPixmap = QPixmap(path) # get Image File
-        myScaledPixmap = myPixmap.scaled(self.viewer.size(), Qt.KeepAspectRatio)
-        self.viewer.setPixmap(myScaledPixmap)
-        
-        self.setFixedSize(600,600) # set Window Size
-        self.setLayout(layout)
-        # move window position -> left to original window / 이미지 팝업창을 기존 창 왼쪽으로 이동
-        self.move(x-parent_width+20, y)
     
 
 if __name__ == '__main__':
