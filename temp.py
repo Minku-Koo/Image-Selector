@@ -7,7 +7,7 @@
 - Updated Date : 27/Dec/2020
 - Author : Minku Koo
 - E-Mail : corleone@kakao.com
-- Version : 1.0.1
+- Version : 1.1.1
 - Keywords : 'PyQt5', 'Python', 'image', 'viewer', 'big data', 'gui', 'selector', 'classify'
 - Github URL : https://github.com/Minku-Koo/Image-Selector
 
@@ -47,11 +47,15 @@ class ImageSelector(QWidget):
         self.img_list=[] #이미지 파일 리스트
         self.file_extension = ["jpg","jpeg","png"] #작업 가능한 파일 확장자
         self.imageScrollHeight = self.HEIGHT * 0.7 #중앙 작업 박스(스크롤 영역) 높이 설정
-        self.imageWindow = None # 이미지 보여주기 window 초기화
+        # self.imageWindow = None # 이미지 보여주기 window 초기화
         self.fileDict = {} # key=file name value=Label Stylesheet
         self.radioSet = {} # key=file name, value=RadioButton Click Position
         self.radioGroupset={} # key=file name, value= 하나만 클릭가능한지 여부
         self.checkedRadio =0 #라디오 버튼 체크 개수
+        self.now_file = -1 #현재파일 index
+        # self.before_file = -1 #기존 클릭 파일 index
+        self.scrollMax = 0 #스크롤바 최대 값
+        self.now_scroll = 0 #현재 스크롤바 값
         self.color_correct = "#FAB773" #  Correct Clicked Label Color
         self.color_incorrect = "#CDC7C1"#  Incorrect Clicked Label Color
         self.fontName = "roboto"  #전체 폰트 설정
@@ -77,9 +81,20 @@ class ImageSelector(QWidget):
         return filter.clicked
    
     # file name clieck -> image show 이미지 클릭하면 이미지 보여줌
-    def showImageViewer(self, path):
-        self.image_path.setText(path) # 파일 이름 설정
-        myPixmap = QPixmap(self.dir_path+"/"+path) # get Image File
+    def showImageViewer(self, filename):
+        
+        self.now_scroll = self.imageScroll.verticalScrollBar().value()
+        # self.fileDict[filename].setStyleSheet("border: 1px solid;padding:3px;")
+        # self.fileDict[self.img_list[self.now_file]].setStyleSheet("border: 0px solid;padding:0px;")
+        
+        
+        
+        self.image_path.setText(filename) # 파일 이름 설정
+        self.now_file = self.img_list.index(filename) #현재 클릭 파일 이름 설정
+        self.CountRadioCheck()
+        
+        
+        myPixmap = QPixmap(self.dir_path+"/"+filename) # get Image File
         myScaledPixmap = myPixmap.scaled(self.viewer.size(), Qt.KeepAspectRatio)
         self.viewer.setPixmap(myScaledPixmap) # show image
     
@@ -139,6 +154,9 @@ class ImageSelector(QWidget):
             elif self.radioSet[file][1].isChecked(): #Checked Incorrect Button
                 count+=1 # 개수 증가
                 backColor+=self.color_incorrect # Incorrect Color 설정
+            else:  backColor+="#ffffff"
+            if file == self.img_list[self.now_file]:
+                backColor += ";border: 1px solid;padding:3px;"
             self.fileDict[file].setStyleSheet(backColor) #해당 Color로 배경색 변경
             
         self.checkedRadio = count #Checked RadioButton 개수 설정
@@ -241,8 +259,8 @@ class ImageSelector(QWidget):
         for file in self.img_list: #All Image File List
             self.fileDict[file]= QLabel(file) #File Dictionary Append
             
-        for file in self.fileDict.keys(): # All Image File Name
-             #클릭하면 함수 실행 / FileName Label Click -> Image Viewer Window 실행
+        # for file in self.fileDict.keys(): # All Image File Name
+             #클릭하면 함수 실행 / FileName Label Click -> Image Viewer 실행
             self.clickable(self.fileDict[file]).connect(lambda f=file:self.showImageViewer(f))
             # MouseOver  on File Name Label -> Change Cursor to Hand Shape 마우스 커서 손모양으로 변경
             self.fileDict[file].setCursor(QCursor(Qt.PointingHandCursor))
@@ -280,6 +298,8 @@ class ImageSelector(QWidget):
             
             # add FileNameLayout on MainLayout
             centerBox.addLayout(fileLayout)
+        
+        
         return 0
     
     # make Directory / Correct and Incorrect Directory
@@ -343,18 +363,66 @@ class ImageSelector(QWidget):
     
     #키보드를 누르면 함수 실행
     def keyPressEvent(self, e):
+        down = 0
+        def clearBorder():
+            filename = self.img_list[self.now_file]
+            self.fileDict[filename].setStyleSheet("border:0;padding:0;")
+            
+            
+        def addBorder():
+            filename = self.img_list[self.now_file]
+            self.showImageViewer(filename)
+            self.CountRadioCheck()
+            # self.fileDict[filename].setStyleSheet("border: 1px solid;padding:3px;")
+            # self.fileDict[filename].setStyleSheet()
         # 사용자 지정 가능하게 만들기 
         if e.key() == Qt.Key_W:
             print("up")
-            
+            if self.now_file > 0:
+                # clearBorder()
+                self.now_file -=1 
+                addBorder()
+                down = -1
         elif e.key() == Qt.Key_S:
             print("down")
+            if self.now_file < len(self.img_list)-1:
+                # clearBorder()
+                self.now_file +=1
+                addBorder()
+                down = 1
+                
         elif e.key() == Qt.Key_Return:
             print("correct")
+            self.radioSet[self.img_list[self.now_file]][0].setChecked(True)
+            self.justClickedRadio()
+            
         elif e.key() == Qt.Key_Shift:
             print("incorrect")
-    
-    
+            self.radioSet[self.img_list[self.now_file]][1].setChecked(True)
+            self.justClickedRadio()
+        
+        
+        self.scrollMax =self.imageScroll.verticalScrollBar().maximum()
+        CHeight = self.imageScroll.height()
+        scroll = self.fileDict[self.img_list[self.now_file]].height()
+        count = int(CHeight / scroll)
+        print("CHeight",CHeight)
+        if down != 0:
+            print("Label height>",self.fileDict[self.img_list[self.now_file]].height())
+            scroll = self.fileDict[self.img_list[self.now_file]].height()
+            # scroll = int((self.scrollMax - CHeight)/(len(self.img_list)-count))
+            # scroll = scroll*(self.now_file+1)
+            print("scroll,",scroll)
+            print("now_file",self.now_file)
+            self.now_scroll += scroll * down
+            self.now_scroll= scroll*(self.now_file)
+            
+            self.imageScroll.verticalScrollBar().setSliderPosition( self.now_scroll )
+            print("self.now_scroll ",self.now_scroll )
+            # print("max",self.imageScroll.verticalScrollBar().maximum())
+            # print("height", self.imageScroll.height())
+            print("val",self.imageScroll.verticalScrollBar().value())
+        
     # make GUI
     def initUI(self): # main user interface 
         self.setWindowTitle('Image Selector') #GUI Title
@@ -426,6 +494,8 @@ class ImageSelector(QWidget):
         self.imageScroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff) #수평 스크롤바 항상 off
         self.imageScroll.setWidgetResizable(True) # file size can resizeable 파일 사이즈 변경 가능
         self.imageScroll.setWidget(self.centerBox)
+        
+        
         
         """
         ------------  GUI 하단  -------------
@@ -561,6 +631,7 @@ class ImageSelector(QWidget):
         self.allLayout.addLayout(self.imageBoxLayout, 5)
         self.allLayout.addLayout(self.mainLayout, 3)
         self.setLayout(self.allLayout) 
+        
         
         self.show() # show GUI
         
