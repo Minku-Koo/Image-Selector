@@ -28,6 +28,7 @@ from PyQt5.QtWidgets import QWidget, QDesktopWidget, QApplication
 import os
 import PySide2
 import shutil
+from PyQt5.Qt import Qt
 
 # QPixmap에서 JPG 파일이 보여지지 않는 경우 설정(환경변수 추가)
 # if jpg file cannot showed on pixmap -> try, add this code 
@@ -339,6 +340,20 @@ class ImageSelector(QWidget):
         centerPositon = QDesktopWidget().availableGeometry().center() # get Window Center Postion / 화면 가운데 위치 식별
         appInfo.moveCenter(centerPositon) #move to Window Center / 화면 중심으로 이동
         self.move(appInfo.topLeft())
+    
+    #키보드를 누르면 함수 실행
+    def keyPressEvent(self, e):
+        # 사용자 지정 가능하게 만들기 
+        if e.key() == Qt.Key_W:
+            print("up")
+            
+        elif e.key() == Qt.Key_S:
+            print("down")
+        elif e.key() == Qt.Key_Return:
+            print("correct")
+        elif e.key() == Qt.Key_Shift:
+            print("incorrect")
+    
     
     # make GUI
     def initUI(self): # main user interface 
