@@ -55,7 +55,7 @@ class ImageSelector(QWidget):
         self.now_file = -1 #현재파일 index
         # self.before_file = -1 #기존 클릭 파일 index
         self.scrollMax = 0 #스크롤바 최대 값
-        self.now_scroll = 0 #현재 스크롤바 값
+        self.now_scroll = 0.0 #현재 스크롤바 값
         self.color_correct = "#FAB773" #  Correct Clicked Label Color
         self.color_incorrect = "#CDC7C1"#  Incorrect Clicked Label Color
         self.fontName = "roboto"  #전체 폰트 설정
@@ -81,12 +81,9 @@ class ImageSelector(QWidget):
         return filter.clicked
    
     # file name clieck -> image show 이미지 클릭하면 이미지 보여줌
-    def showImageViewer(self, filename):
-        
-        self.now_scroll = self.imageScroll.verticalScrollBar().value()
-        # self.fileDict[filename].setStyleSheet("border: 1px solid;padding:3px;")
-        # self.fileDict[self.img_list[self.now_file]].setStyleSheet("border: 0px solid;padding:0px;")
-        
+    def showImageViewer(self, filename, key=0): # key는 기본값 0, 키보드 입력의 경우 1 입력
+        if key==0: # 마우스 클릭인 경우만 now_scroll 변수 변경
+            self.now_scroll = self.imageScroll.verticalScrollBar().value()
         
         
         self.image_path.setText(filename) # 파일 이름 설정
@@ -363,65 +360,56 @@ class ImageSelector(QWidget):
     
     #키보드를 누르면 함수 실행
     def keyPressEvent(self, e):
-        down = 0
-        def clearBorder():
-            filename = self.img_list[self.now_file]
-            self.fileDict[filename].setStyleSheet("border:0;padding:0;")
-            
-            
+        move = 0
+        
         def addBorder():
             filename = self.img_list[self.now_file]
-            self.showImageViewer(filename)
+            self.showImageViewer(filename, key=1)
             self.CountRadioCheck()
-            # self.fileDict[filename].setStyleSheet("border: 1px solid;padding:3px;")
-            # self.fileDict[filename].setStyleSheet()
+            
         # 사용자 지정 가능하게 만들기 
         if e.key() == Qt.Key_W:
-            print("up")
             if self.now_file > 0:
-                # clearBorder()
                 self.now_file -=1 
                 addBorder()
-                down = -1
+                move = -1
+                
         elif e.key() == Qt.Key_S:
-            print("down")
             if self.now_file < len(self.img_list)-1:
-                # clearBorder()
                 self.now_file +=1
                 addBorder()
-                down = 1
+                move = 1
                 
         elif e.key() == Qt.Key_Return:
-            print("correct")
             self.radioSet[self.img_list[self.now_file]][0].setChecked(True)
             self.justClickedRadio()
             
         elif e.key() == Qt.Key_Shift:
-            print("incorrect")
             self.radioSet[self.img_list[self.now_file]][1].setChecked(True)
             self.justClickedRadio()
         
         
-        self.scrollMax =self.imageScroll.verticalScrollBar().maximum()
-        CHeight = self.imageScroll.height()
-        scroll = self.fileDict[self.img_list[self.now_file]].height()
-        count = int(CHeight / scroll)
-        print("CHeight",CHeight)
-        if down != 0:
-            print("Label height>",self.fileDict[self.img_list[self.now_file]].height())
-            scroll = self.fileDict[self.img_list[self.now_file]].height()
-            # scroll = int((self.scrollMax - CHeight)/(len(self.img_list)-count))
-            # scroll = scroll*(self.now_file+1)
-            print("scroll,",scroll)
-            print("now_file",self.now_file)
-            self.now_scroll += scroll * down
-            self.now_scroll= scroll*(self.now_file)
+        if move != 0:
             
+            self.scrollMax =self.imageScroll.verticalScrollBar().maximum()
+            centerHeight = self.imageScroll.height()
+            labelHeight = self.fileDict[self.img_list[self.now_file]].height()
+            count = int(centerHeight / labelHeight)
+            scroll =  int((self.scrollMax+centerHeight) / len(self.img_list))
+            
+            if self.now_file > len(self.img_list)-int(count/2) and move<0:
+            elif  self.now_file < int(count/2)  and move>0:
+                pass
+            else:
+                if move>0 and self.now_scroll >= self.scrollMax : pass #self.now_scroll = self.scrollMax
+                elif move<0 and self.now_scroll <=0: pass
+                else:  self.now_scroll = self.now_scroll +  scroll * move
+                
             self.imageScroll.verticalScrollBar().setSliderPosition( self.now_scroll )
             print("self.now_scroll ",self.now_scroll )
             # print("max",self.imageScroll.verticalScrollBar().maximum())
             # print("height", self.imageScroll.height())
-            print("val",self.imageScroll.verticalScrollBar().value())
+            # print("val",self.imageScroll.verticalScrollBar().value())
         
     # make GUI
     def initUI(self): # main user interface 
