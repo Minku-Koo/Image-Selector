@@ -1,0 +1,2 @@
+[2021-01-06 17:44:25] D:/pdf/캡쳐파일 => D:/pdf/결과자료/캡쳐파일Correct File :10 / Incorrect File :5
+[2021-01-06 17:46:09] <D:/pdf/결과자료 => D:/pdf/캡쳐파일/결과자료> Correct File :12 / Incorrect File :5
