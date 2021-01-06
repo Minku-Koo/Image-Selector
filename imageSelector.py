@@ -672,7 +672,7 @@ class ImageSelector(QWidget):
         self.imageBoxLayout = QVBoxLayout()
         self.view_layout = QVBoxLayout()
         # file name / 파일 이름 초기화
-        self.image_path = QLabel("Image Viewer, File Path will be showed here")
+        self.image_path = QLabel("[ Image Viewer ]  File Path will be showed here")
         self.viewer = QLabel()
         self.viewer.setAlignment(QtCore.Qt.AlignCenter)
         self.viewer.resize( int(self.WIDTH/2),700) # image size
