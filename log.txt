@@ -1,6 +1,6 @@
 [2021-01-06 17:25:08] <C:/Users/user/Pictures/cam => C:/Users/user/Pictures/cam/cam-classified> Correct File :37 / Incorrect File :8
 [2021-01-06 18:16:36] <D:/pdf/캡쳐파일 => D:/pdf/abc/캡쳐파일-classified> Correct File :13 / Incorrect File :4
-[2021-01-06 18:52:03] <D:/pdf/할미새사촌 - 복사본 => D:/pdf/할미새사촌 - 복사본/할미새사촌 - 복사본-classified> Correct File :7 / Incorrect File :2
-[2021-01-06 18:53:21] <D:/pdf/할미새사촌 - 복사본 (3) => D:/pdf/할미새사촌 - 복사본 (3)/할미새사촌 - 복사본 (3)-classified> Correct File :7 / Incorrect File :2
-[2021-01-06 18:54:50] <D:/pdf/할미새사촌 - 복사본 => D:/pdf/할미새사촌 - 복사본/할미새사촌 - 복사본-classified> Correct File :10 / Incorrect File :0
-[2021-01-06 19:04:29] <C:/Users/구민구/Desktop/GitKoo/Image-Selector/test-file-1 => C:/Users/구민구/Desktop/GitKoo/Image-Selector/targetDirectory/test-file-1-classified> Correct File :5 / Incorrect File :5
+[2021-01-06 18:52:03] <D:/pdf/collect => D:/pdf/collect-target/collect-classified> Correct File :7 / Incorrect File :2
+[2021-01-06 18:53:21] <D:/pdf/capture => D:/pdf/picSelect/capture-classified> Correct File :7 / Incorrect File :2
+[2021-01-06 18:54:50] <D:/pdf/pdf_pic => D:/pdf/pdf_pic/pdf_pic-classified> Correct File :10 / Incorrect File :0
+[2021-01-06 19:04:29] <C:/Users/user/Desktop/GitKoo/Image-Selector/test-file-1 => C:/Users/user/Desktop/GitKoo/Image-Selector/targetDirectory/test-file-1-classified> Correct File :5 / Incorrect File :5
