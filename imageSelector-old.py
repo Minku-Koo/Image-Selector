@@ -4,10 +4,10 @@
 
 - Project Name : Image File Selector (for make image Data-Set)
 - Created Date : 26/Dec/2020
-- Updated Date : 06/Jan/2021
+- Updated Date : 27/Dec/2020
 - Author : Minku Koo
 - E-Mail : corleone@kakao.com
-- Version : 1.1.4
+- Version : 1.0.1
 - Keywords : 'PyQt5', 'Python', 'image', 'viewer', 'big data', 'gui', 'selector', 'classify'
 - Github URL : https://github.com/Minku-Koo/Image-Selector
 
@@ -28,8 +28,6 @@ from PyQt5.QtWidgets import QWidget, QDesktopWidget, QApplication
 import os
 import PySide2
 import shutil
-from PyQt5.Qt import Qt
-import datetime
 
 # QPixmap에서 JPG 파일이 보여지지 않는 경우 설정(환경변수 추가)
 # if jpg file cannot showed on pixmap -> try, add this code 
@@ -41,23 +39,18 @@ class ImageSelector(QWidget):
         super(ImageSelector, self).__init__()
         # GUI 높이/길이
         self.HEIGHT = 800
-        self.WIDTH = 800 * 2
-        self.resize(self.WIDTH, self.HEIGHT)
-        # self.setFixedSize(self.WIDTH, self.HEIGHT) #높이 길이 설정
+        self.WIDTH = 700
+        
+        self.setFixedSize(self.WIDTH, self.HEIGHT) #높이 길이 설정
         self.dir_path = "" #작업 디렉토리 선언
-        self.target_path = "" #대상 디렉토리 선언
         self.img_list=[] #이미지 파일 리스트
         self.file_extension = ["jpg","jpeg","png"] #작업 가능한 파일 확장자
         self.imageScrollHeight = self.HEIGHT * 0.7 #중앙 작업 박스(스크롤 영역) 높이 설정
-        # self.imageWindow = None # 이미지 보여주기 window 초기화
+        self.imageWindow = None # 이미지 보여주기 window 초기화
         self.fileDict = {} # key=file name value=Label Stylesheet
         self.radioSet = {} # key=file name, value=RadioButton Click Position
         self.radioGroupset={} # key=file name, value= 하나만 클릭가능한지 여부
         self.checkedRadio =0 #라디오 버튼 체크 개수
-        self.now_file = -1 #현재파일 index
-        # self.before_file = -1 #기존 클릭 파일 index
-        self.scrollMax = 0 #스크롤바 최대 값
-        self.now_scroll = 0.0 #현재 스크롤바 값
         self.color_correct = "#FAB773" #  Correct Clicked Label Color
         self.color_incorrect = "#CDC7C1"#  Incorrect Clicked Label Color
         self.fontName = "roboto"  #전체 폰트 설정
@@ -82,20 +75,21 @@ class ImageSelector(QWidget):
         widget.installEventFilter(filter)
         return filter.clicked
    
-    # file name clieck -> image show 이미지 클릭하면 이미지 보여줌
-    def showImageViewer(self, filename, key=0): # key는 기본값 0, 키보드 입력의 경우 1 입력
-        if key==0: # 마우스 클릭인 경우만 now_scroll 변수 변경
-            self.now_scroll = self.imageScroll.verticalScrollBar().value()
+    # 라벨(파일 이름) 클릭 시, 이미지 팝업창 생성
+    def showImagePopUp(self, path): #Parameter: Image Path<String> 
+        if self.imageWindow is not None: # 기존에 켜져있는 경우
+            self.imageWindow =None #종료
+            
+        location =self.pos() #현재 GUI 위치 Now GUI Position
+        imagePath = self.dir_path+"/"+path #클릭 이미지 경로 Clicked Image Path
+        if self.imageWindow is None:
+            # 이미지 팝업 윈도우 새로 열기 Image Pop Up Window New Open
+            # Parameter: image path<String>, GUI Width<int>, GUI Location X Value<int>, GUI Location Y Value<int>
+            self.imageWindow = ImageShowWindow(imagePath, self.WIDTH, location.x(), location.y())
+            
+        self.imageWindow.show() #이미지 팝업 보여주기 
+        return 0
         
-        self.image_path.setText(filename) # 파일 이름 설정
-        self.now_file = self.img_list.index(filename) #현재 클릭 파일 이름 설정
-        self.CountRadioCheck()
-        
-        
-        myPixmap = QPixmap(self.dir_path+"/"+filename) # get Image File
-        myScaledPixmap = myPixmap.scaled(self.viewer.size(), Qt.KeepAspectRatio)
-        self.viewer.setPixmap(myScaledPixmap) # show image
-    
     # RadioButton 전체 Correct로 선택 
     def AllRadioSelectCorrect(self):
         for file in self.img_list: # 모든 이미지 파일 이름 All ImageFile Name
@@ -152,9 +146,6 @@ class ImageSelector(QWidget):
             elif self.radioSet[file][1].isChecked(): #Checked Incorrect Button
                 count+=1 # 개수 증가
                 backColor+=self.color_incorrect # Incorrect Color 설정
-            else:  backColor+="#ffffff"
-            if file == self.img_list[self.now_file]:
-                backColor += ";border: 2px solid ;padding:0px;"
             self.fileDict[file].setStyleSheet(backColor) #해당 Color로 배경색 변경
             
         self.checkedRadio = count #Checked RadioButton 개수 설정
@@ -257,9 +248,9 @@ class ImageSelector(QWidget):
         for file in self.img_list: #All Image File List
             self.fileDict[file]= QLabel(file) #File Dictionary Append
             
-        # for file in self.fileDict.keys(): # All Image File Name
-             #클릭하면 함수 실행 / FileName Label Click -> Image Viewer 실행
-            self.clickable(self.fileDict[file]).connect(lambda f=file:self.showImageViewer(f))
+        for file in self.fileDict.keys(): # All Image File Name
+             #클릭하면 함수 실행 / FileName Label Click -> Image Viewer Window 실행
+            self.clickable(self.fileDict[file]).connect(lambda f=file:self.showImagePopUp(f))
             # MouseOver  on File Name Label -> Change Cursor to Hand Shape 마우스 커서 손모양으로 변경
             self.fileDict[file].setCursor(QCursor(Qt.PointingHandCursor))
             
@@ -296,97 +287,57 @@ class ImageSelector(QWidget):
             
             # add FileNameLayout on MainLayout
             centerBox.addLayout(fileLayout)
-        
-        
         return 0
     
     # make Directory / Correct and Incorrect Directory
     def makeNewDir(self, dirname): #Parameter: directory name 폴더 이름 <string>
         try:
             # if same name directory do not exists 같은 이름 폴더 존재하지 않으면
-            if not os.path.exists(self.target_path +"/"+dirname):
+            if not os.path.exists(self.dir_path +"/"+dirname):
                 # make directory 폴더 생성
-                os.makedirs(self.target_path +"/"+dirname)
+                os.makedirs(self.dir_path +"/"+dirname)
                 
         except OSError:pass # same name directory exists
         return 0
     
-    
     # File move to directory 분류한 파일을 디렉토리 이동
     def moveImageFile(self, correct, incorrect): #Parameter: correct file name list<list>, incorrect file name list<list>
-        dir_name = "/"+self.dir_path.split('/')[-1]+"-classified"
         # file make using function
-        self.makeNewDir(dir_name+"/correct")
-        self.makeNewDir(dir_name+"/incorrect")
+        self.makeNewDir("correct")
+        self.makeNewDir("incorrect")
         
         for file in correct: # correct file list move to correct directory
-            shutil.move(self.dir_path+"/"+file, self.target_path+dir_name+"/correct/"+file)
+            shutil.move(self.dir_path+"/"+file, self.dir_path+"/correct/"+file)
             
         for file in incorrect: # incorrect file list move to incorrect directory
-            shutil.move(self.dir_path+"/"+file, self.target_path+dir_name+"/incorrect/"+file)
-        
-        self.makeLogfile(len(correct),len(incorrect))
-        return 0
-    
-    #  make Log file  that file classify history (.txt.) / 파일 분류 기록을 위한 로그 파일 생성
-    def makeLogfile(self, correct_count, incorrect_count):
-        dir_name = "/"+self.dir_path.split('/')[-1]
-        nowTime = datetime.datetime.now()
-        nowDateTime = nowTime.strftime('%Y-%m-%d %H:%M:%S')
-        fileWrite = '['+nowDateTime+'] <' + self.dir_path +" => " +self.target_path+dir_name+"> "
-        fileWrite += "Correct File :"+str(correct_count)+" / Incorrect File :"+str(incorrect_count)
-        
-        logfile = "log.txt"
-        with open(logfile, 'at', encoding='utf-8') as f:
-            f.write(fileWrite)
-            f.write('\n')
+            shutil.move(self.dir_path+"/"+file, self.dir_path+"/incorrect/"+file)
         
         return 0
     
-    
-    # New directory Open 디렉터리 새로 열기 / Parameter: source (0) OR target (1) <int>
-    def changeDirFunc(self, where):
-        if where==0: # source directory
-            temp = self.dir_path # original Directory Path
-            orgDirText = self.dir_text.text() # original Label Text
-        else: # target directory
-            temp = self.target_path # original Directory Path
-            orgDirText = self.target_dir_text.text() # original Label Text
-            
+    # New directory Open 디렉터리 새로 열기
+    def changeDirFunc(self):
+        temp = self.dir_path # original Directory Path
+        orgDirText = self.dir_text.text() # original Label Text
+        
         try:
-            if where==0:
-                # Select Directory 폴더 선택창
-                self.dir_path = QFileDialog.getExistingDirectory(self, "Select Image Directory")
-                self.dir_text.setText(self.dir_path) #Label Text Change
-                
-                if self.dir_path!="":self.img_list=[] # image FileName List 초기화
+            # Select Directory 폴더 선택창
+            self.dir_path = QFileDialog.getExistingDirectory(self, "Select Image Directory")
+            self.dir_text.setText(self.dir_path) #Label Text Change
+            self.img_list=[] # image FileName List 초기화
             
-                for file in os.listdir(self.dir_path) : # Selected Directory All File 선택된 폴더의 모든 파일
-                    # file extension is image file 파일 확장자가 이미지 파일인 경우만 추가
-                    if file.split(".")[-1].lower() in self.file_extension: 
-                        self.img_list.append(file)
-                
-                # Label Text Change 라벨 텍스트 재설정
-                self.AllBox.setText("Total "+str(len(self.img_list))+" /")
-                self.addFileNameLayout(self.vbox)
-            else:
-                self.target_path = QFileDialog.getExistingDirectory(self, "Select Image Directory")
-                self.target_dir_text.setText(self.target_path) #Label Text Change
+            for file in os.listdir(self.dir_path) : # Selected Directory All File 선택된 폴더의 모든 파일
+                # file extension is image file 파일 확장자가 이미지 파일인 경우만 추가
+                if file.split(".")[-1].lower() in self.file_extension: 
+                    self.img_list.append(file)
+                    
+            # Label Text Change 라벨 텍스트 재설정
+            self.AllBox.setText("Total "+str(len(self.img_list))+" /")
+            self.addFileNameLayout(self.vbox)
             
         except(FileNotFoundError): # if close 취소할 경우
-            print("close")
             # set original value  기존 값 재설정
-            if where ==0:
-                self.dir_path =temp
-                self.dir_text.setText(orgDirText)
-        if self.target_path=="":
-            if where==1 :
-                self.target_path =temp
-                self.target_dir_text.setText(orgDirText)
-            
-            if where==0 :
-                self.target_path = self.dir_path
-                self.target_dir_text.setText(self.dir_path)
+            self.dir_path =temp
+            self.dir_text.setText(orgDirText)
         
         return 0
     
@@ -397,59 +348,6 @@ class ImageSelector(QWidget):
         appInfo.moveCenter(centerPositon) #move to Window Center / 화면 중심으로 이동
         self.move(appInfo.topLeft())
     
-    #키보드를 누르면 함수 실행
-    def keyPressEvent(self, e):
-        move = 0
-        
-        def addBorder():
-            filename = self.img_list[self.now_file]
-            self.showImageViewer(filename, key=1)
-            self.CountRadioCheck()
-            
-        # 사용자 지정 가능하게 만들기 
-        if e.key() == Qt.Key_W:
-            if self.now_file > 0:
-                self.now_file -=1 
-                addBorder()
-                move = -1
-                
-        elif e.key() == Qt.Key_S:
-            if self.now_file < len(self.img_list)-1:
-                self.now_file +=1
-                addBorder()
-                move = 1
-                
-        elif e.key() == Qt.Key_Return:
-            self.radioSet[self.img_list[self.now_file]][0].setChecked(True)
-            self.justClickedRadio()
-            
-        elif e.key() == Qt.Key_Shift:
-            self.radioSet[self.img_list[self.now_file]][1].setChecked(True)
-            self.justClickedRadio()
-        
-        
-        if move != 0:
-            
-            self.scrollMax =self.imageScroll.verticalScrollBar().maximum()
-            centerHeight = self.imageScroll.height()
-            labelHeight = self.fileDict[self.img_list[self.now_file]].height()
-            count = int(centerHeight / labelHeight)
-            scroll =  int((self.scrollMax+centerHeight) / len(self.img_list))
-            
-            if self.now_file > len(self.img_list)-int(count/2) and move<0: pass
-            elif  self.now_file < int(count/2)  and move>0:
-                pass
-            else:
-                if move>0 and self.now_scroll >= self.scrollMax : pass #self.now_scroll = self.scrollMax
-                elif move<0 and self.now_scroll <=0: pass
-                else:  self.now_scroll = self.now_scroll +  scroll * move
-                
-            self.imageScroll.verticalScrollBar().setSliderPosition( self.now_scroll )
-            print("self.now_scroll ",self.now_scroll )
-            # print("max",self.imageScroll.verticalScrollBar().maximum())
-            # print("height", self.imageScroll.height())
-            # print("val",self.imageScroll.verticalScrollBar().value())
-        
     # make GUI
     def initUI(self): # main user interface 
         self.setWindowTitle('Image Selector') #GUI Title
@@ -473,68 +371,32 @@ class ImageSelector(QWidget):
         
         # directory path text 초기화
         self.dir_text = QLabel("Select Directory, first", self)
-        self.dir_text.setFont(QFont(self.fontName,9))
+        self.dir_text.setFont(QFont(self.fontName,11))
         self.dir_text.setAlignment(QtCore.Qt.AlignCenter)
         
         
         lb_title.setStyleSheet(head_style) # set StyleSheet 
         # set Label Height 라벨 높이
         lb_title.setFixedHeight( int(self.HEIGHT/13) )
-        self.dir_text.setFixedHeight( int(self.HEIGHT/20) )
+        self.dir_text.setFixedHeight( int(self.HEIGHT/18) )
         self.dir_text.setStyleSheet("background-color: #F7DCC2;")
         
-        
         head_hbox = QHBoxLayout() # for open Folder Button 파일 열기 버튼
-        path_change = QPushButton(self, text=" Source Directory") # Button Name 버튼 이름
-        path_change.setCursor(QCursor(Qt.PointingHandCursor))
+        path_change = QPushButton(self, text="Open Directory") # Button Name 버튼 이름
         # Button StyleSheet 버튼 스타일
         change_style  = "font-size: 13px;font-family:"+self.fontName+"""; background-color: #E7E3DF;\
                 border-radius: 3px;border: 2px solid  #DDD9D5;padding:5px"""
         path_change.setStyleSheet(change_style)
         # set Function on Open Directory  버튼에 함수 설정
         path_change.clicked.connect(self.changeDirFunc)
-        self.clickable(path_change).connect(lambda :self.changeDirFunc(0))
         # add Empty Label for float:right 오른쪽 배치를 위해 빈 라벨 추가
-        head_hbox.addWidget(self.dir_text, 4) 
+        head_hbox.addWidget(QLabel(), 4) 
         head_hbox.addWidget(path_change)
-        
-        
-        # target directory path text 초기화
-        self.target_dir_text = QLabel("Target Directory Path", self)
-        self.target_dir_text.setFont(QFont(self.fontName,9))
-        self.target_dir_text.setAlignment(QtCore.Qt.AlignCenter)
-        self.target_dir_text.setFixedHeight( int(self.HEIGHT/20) )
-        self.target_dir_text.setStyleSheet("background-color: #F7DCC2;")
-        
-        head_hbox2 = QHBoxLayout() # for open Folder Button 파일 열기 버튼
-        t_path_change = QPushButton(self, text=" Target Directory ") # Button Name 버튼 이름
-        t_path_change.setCursor(QCursor(Qt.PointingHandCursor))
-        # Button StyleSheet 버튼 스타일
-        change_style  = "font-size: 13px;font-family:"+self.fontName+"""; background-color: #E7E3DF;\
-                border-radius: 3px;border: 2px solid  #DDD9D5;padding:5px"""
-        t_path_change.setStyleSheet(change_style)
-        # set Function on Open Directory  버튼에 함수 설정
-        # t_path_change.clicked.connect(self.changeTargetDirFunc)
-        self.clickable(t_path_change).connect(lambda :self.changeDirFunc(1))
-        # add Empty Label for float:right 오른쪽 배치를 위해 빈 라벨 추가
-        head_hbox2.addWidget(self.target_dir_text, 4) 
-        head_hbox2.addWidget(t_path_change)
-        
-        keyboard_info = QLabel("Up:<W>  Down:<S>  Correct:<Enter>  Incorrect:<Shift>", self)
-        # keyboard_info = QLabel(info, self)
-        keyboard_info.setFont(QFont(self.fontName,10))
-        keyboard_info.setFixedHeight( 14)
-        keyboard_info.setAlignment(QtCore.Qt.AlignCenter)
-        # keyboard_info.setAlignment(Qt.AlignTop)
-        # keyboard_info_Layout.addWidget(keyboard_info)
         
         # add Widget on Header Label 헤더 라벨에 위젯 추가
         lb_head.addWidget(lb_title)
-        # lb_head.addWidget(self.dir_text)
+        lb_head.addWidget(self.dir_text)
         lb_head.addLayout(head_hbox)
-        # lb_head.addWidget(self.target_dir_text)
-        lb_head.addLayout(head_hbox2)
-        lb_head.addWidget(keyboard_info)
         
         lb_head.setAlignment(Qt.AlignTop) # Header Label to top 헤더 라벨을 맨 위로 올리기
         
@@ -557,8 +419,6 @@ class ImageSelector(QWidget):
         self.imageScroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff) #수평 스크롤바 항상 off
         self.imageScroll.setWidgetResizable(True) # file size can resizeable 파일 사이즈 변경 가능
         self.imageScroll.setWidget(self.centerBox)
-        
-        
         
         """
         ------------  GUI 하단  -------------
@@ -604,14 +464,12 @@ class ImageSelector(QWidget):
         
         # make All Correct Button
         btn1 = QPushButton(all_btn_group, text="All Correct")
-        btn1.setCursor(QCursor(Qt.PointingHandCursor))
         btn1.setStyleSheet(btn_style+self.color_correct+";background-color:"+self.color_correct )
         btn1.setFixedHeight(AllButtonHeight) # set Button Height
         btn1.clicked.connect(self.AllRadioSelectCorrect)  # set Function on Button  클릭하면 함수 실행
         
         # make All Incorrect Button
         btn2 = QPushButton(all_btn_group, text="All Incorrect")
-        btn2.setCursor(QCursor(Qt.PointingHandCursor))
         btn2.setStyleSheet(btn_style+self.color_incorrect+";background-color:"+self.color_incorrect )
         btn2.setFixedHeight(AllButtonHeight)
         btn2.clicked.connect(self.AllRadioSelectIncorrect) 
@@ -648,7 +506,6 @@ class ImageSelector(QWidget):
         btn_reset_style = "font-size: 14px;font-family: "+self.fontName+""";background-color: #E7E3DF;
                         border-radius: 3px;border: 2px solid #DDD9D5;"""
         self.ResetButton = QPushButton("R E S E T")
-        self.ResetButton.setCursor(QCursor(Qt.PointingHandCursor))
         self.ResetButton.setStyleSheet(btn_reset_style+"margin-right: 11px;")
         self.ResetButton.clicked.connect(self.AllResetFunc)
         self.ResetButton.setFixedHeight(30)
@@ -663,7 +520,6 @@ class ImageSelector(QWidget):
         btn_finish_style = """color: white;font-weight:600;font-size: 25px ;background-color: #F6881A  ;
                         border-radius: 22px;border: 5px solid #E2811F ;font-family:"""+self.fontName#border: 4px solid #FE2E2E;
         selectFinish = QPushButton("D O N E")
-        selectFinish.setCursor(QCursor(Qt.PointingHandCursor))
         selectFinish.setStyleSheet(btn_finish_style)
         selectFinish.clicked.connect(self.doneWork) # set Function when clicked Button  함수 적용
         selectFinish.setFixedHeight(60)
@@ -673,35 +529,40 @@ class ImageSelector(QWidget):
         """
         ------------  set Final Layout / 최종 레이아웃 설정  -------------
         """
-        #    Image Viewer     이미지 뷰어 
-        self.imageBoxLayout = QVBoxLayout()
-        self.view_layout = QVBoxLayout()
-        # file name / 파일 이름 초기화
-        self.image_path = QLabel("Image Viewer, File Path will be showed here")
-        self.viewer = QLabel()
-        self.viewer.setAlignment(QtCore.Qt.AlignCenter)
-        self.viewer.resize( int(self.WIDTH/2),700) # image size
-        # self.viewer.setFixedSize( int(self.WIDTH/2),700) # window size
-        self.view_layout.addWidget(self.image_path, 1)
-        self.view_layout.addWidget(self.viewer,6)
-        self.image_path.setFont(QFont(self.fontName, 13))
-        self.imageBoxLayout.addLayout(self.view_layout)
-        
         # main Layout 
         self.mainLayout = QVBoxLayout()
         self.mainLayout.addLayout(lb_head)
         self.mainLayout.addWidget(self.imageScroll)
         self.mainLayout.addLayout(self.lb_bottom)
         self.mainLayout.setAlignment(Qt.AlignTop)
-        
-        self.allLayout = QHBoxLayout()
-        self.allLayout.addLayout(self.imageBoxLayout, 5)
-        self.allLayout.addLayout(self.mainLayout, 3)
-        self.setLayout(self.allLayout) 
-        
+        self.setLayout(self.mainLayout) #main layout
         
         self.show() # show GUI
         
+    
+
+
+# Image File Viewer Window, like Pop Up / 이미지 보여주는 별도의 창 생성
+class ImageShowWindow(QWidget):
+    # Parameter: file path 파일 경로<string>, gui width 기존 창 넓이<int>, gui x position 기존 창 x 값<int>, gui y position 기존 창 y 값<int>
+    def __init__(self, path, parent_width, x, y):
+        super().__init__()
+        self.setWindowTitle('Image Viewer') #image Viewer Title
+        
+        layout = QVBoxLayout()
+        self.viewer = QLabel()
+        self.viewer.setAlignment(QtCore.Qt.AlignCenter)
+        self.viewer.setFixedSize(570,570) # window size
+        layout.addWidget(self.viewer)
+        
+        myPixmap = QPixmap(path) # get Image File
+        myScaledPixmap = myPixmap.scaled(self.viewer.size(), Qt.KeepAspectRatio)
+        self.viewer.setPixmap(myScaledPixmap)
+        
+        self.setFixedSize(600,600) # set Window Size
+        self.setLayout(layout)
+        # move window position -> left to original window / 이미지 팝업창을 기존 창 왼쪽으로 이동
+        self.move(x-parent_width+20, y)
     
 
 if __name__ == '__main__':
