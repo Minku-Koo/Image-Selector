@@ -153,7 +153,7 @@ class ImageSelector(QWidget):
                 backColor+=self.color_incorrect # Incorrect Color 설정
             else:  backColor+="#ffffff"
             if file == self.img_list[self.now_file]:
-                backColor += ";border: 1px solid;padding:3px;"
+                backColor += ";border: 2px solid ;padding:0px;"
             self.fileDict[file].setStyleSheet(backColor) #해당 Color로 배경색 변경
             
         self.checkedRadio = count #Checked RadioButton 개수 설정
@@ -397,7 +397,7 @@ class ImageSelector(QWidget):
             count = int(centerHeight / labelHeight)
             scroll =  int((self.scrollMax+centerHeight) / len(self.img_list))
             
-            if self.now_file > len(self.img_list)-int(count/2) and move<0:
+            if self.now_file > len(self.img_list)-int(count/2) and move<0: pass
             elif  self.now_file < int(count/2)  and move>0:
                 pass
             else:
