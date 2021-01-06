@@ -44,6 +44,7 @@ class ImageSelector(QWidget):
         self.resize(self.WIDTH, self.HEIGHT)
         # self.setFixedSize(self.WIDTH, self.HEIGHT) #높이 길이 설정
         self.dir_path = "" #작업 디렉토리 선언
+        self.target_path = "" #대상 디렉토리 선언
         self.img_list=[] #이미지 파일 리스트
         self.file_extension = ["jpg","jpeg","png"] #작업 가능한 파일 확장자
         self.imageScrollHeight = self.HEIGHT * 0.7 #중앙 작업 박스(스크롤 영역) 높이 설정
@@ -310,6 +311,7 @@ class ImageSelector(QWidget):
         except OSError:pass # same name directory exists
         return 0
     
+    
     # File move to directory 분류한 파일을 디렉토리 이동
     def moveImageFile(self, correct, incorrect): #Parameter: correct file name list<list>, incorrect file name list<list>
         # file make using function
@@ -324,30 +326,49 @@ class ImageSelector(QWidget):
         
         return 0
     
-    # New directory Open 디렉터리 새로 열기
-    def changeDirFunc(self):
-        temp = self.dir_path # original Directory Path
-        orgDirText = self.dir_text.text() # original Label Text
-        
-        try:
-            # Select Directory 폴더 선택창
-            self.dir_path = QFileDialog.getExistingDirectory(self, "Select Image Directory")
-            self.dir_text.setText(self.dir_path) #Label Text Change
-            self.img_list=[] # image FileName List 초기화
+    #  make Log file  that file classify history (.txt.) / 파일 분류 기록을 위한 로그 파일 생성
+    def makeLogfile(self, correct_count, incorrect_count):
+        pass
+    
+    
+    # New directory Open 디렉터리 새로 열기 / Parameter: source (0) OR target (1) <int>
+    def changeDirFunc(self, where):
+        if where==0: # source directory
+            temp = self.dir_path # original Directory Path
+            orgDirText = self.dir_text.text() # original Label Text
+        else: # target directory
+            temp = self.target_path # original Directory Path
+            orgDirText = self.target_dir_text.text() # original Label Text
             
-            for file in os.listdir(self.dir_path) : # Selected Directory All File 선택된 폴더의 모든 파일
-                # file extension is image file 파일 확장자가 이미지 파일인 경우만 추가
-                if file.split(".")[-1].lower() in self.file_extension: 
-                    self.img_list.append(file)
-                    
-            # Label Text Change 라벨 텍스트 재설정
-            self.AllBox.setText("Total "+str(len(self.img_list))+" /")
-            self.addFileNameLayout(self.vbox)
+        try:
+            if where==0:
+                # Select Directory 폴더 선택창
+                self.dir_path = QFileDialog.getExistingDirectory(self, "Select Image Directory")
+                self.dir_text.setText(self.dir_path) #Label Text Change
+                self.img_list=[] # image FileName List 초기화
+            
+            
+                for file in os.listdir(self.dir_path) : # Selected Directory All File 선택된 폴더의 모든 파일
+                    # file extension is image file 파일 확장자가 이미지 파일인 경우만 추가
+                    if file.split(".")[-1].lower() in self.file_extension: 
+                        self.img_list.append(file)
+            
+                # Label Text Change 라벨 텍스트 재설정
+                self.AllBox.setText("Total "+str(len(self.img_list))+" /")
+                self.addFileNameLayout(self.vbox)
+            else:
+                self.target_path = QFileDialog.getExistingDirectory(self, "Select Image Directory")
+                self.target_dir_text.setText(self.target_path) #Label Text Change
             
         except(FileNotFoundError): # if close 취소할 경우
+            print("close")
             # set original value  기존 값 재설정
-            self.dir_path =temp
-            self.dir_text.setText(orgDirText)
+            if where ==0:
+                self.dir_path =temp
+                self.dir_text.setText(orgDirText)
+        if where==1 and self.target_path=="":
+            self.target_path =temp
+            self.target_dir_text.setText(orgDirText)
         
         return 0
     
@@ -434,7 +455,7 @@ class ImageSelector(QWidget):
         
         # directory path text 초기화
         self.dir_text = QLabel("Select Directory, first", self)
-        self.dir_text.setFont(QFont(self.fontName,11))
+        self.dir_text.setFont(QFont(self.fontName,10))
         self.dir_text.setAlignment(QtCore.Qt.AlignCenter)
         
         
@@ -444,6 +465,7 @@ class ImageSelector(QWidget):
         self.dir_text.setFixedHeight( int(self.HEIGHT/18) )
         self.dir_text.setStyleSheet("background-color: #F7DCC2;")
         
+        
         head_hbox = QHBoxLayout() # for open Folder Button 파일 열기 버튼
         path_change = QPushButton(self, text="Open Directory") # Button Name 버튼 이름
         # Button StyleSheet 버튼 스타일
@@ -452,14 +474,39 @@ class ImageSelector(QWidget):
         path_change.setStyleSheet(change_style)
         # set Function on Open Directory  버튼에 함수 설정
         path_change.clicked.connect(self.changeDirFunc)
+        self.clickable(path_change).connect(lambda :self.changeDirFunc(0))
         # add Empty Label for float:right 오른쪽 배치를 위해 빈 라벨 추가
-        head_hbox.addWidget(QLabel(), 4) 
+        head_hbox.addWidget(self.dir_text, 4) 
         head_hbox.addWidget(path_change)
+        
+        
+        # target directory path text 초기화
+        target_dir_layout = QHBoxLayout()
+        self.target_dir_text = QLabel("Target Directory Path", self)
+        self.target_dir_text.setFont(QFont(self.fontName,10))
+        self.target_dir_text.setAlignment(QtCore.Qt.AlignCenter)
+        self.target_dir_text.setFixedHeight( int(self.HEIGHT/18) )
+        self.target_dir_text.setStyleSheet("background-color: #F7DCC2;")
+        
+        head_hbox2 = QHBoxLayout() # for open Folder Button 파일 열기 버튼
+        t_path_change = QPushButton(self, text="Open Directory") # Button Name 버튼 이름
+        # Button StyleSheet 버튼 스타일
+        change_style  = "font-size: 13px;font-family:"+self.fontName+"""; background-color: #E7E3DF;\
+                border-radius: 3px;border: 2px solid  #DDD9D5;padding:5px"""
+        t_path_change.setStyleSheet(change_style)
+        # set Function on Open Directory  버튼에 함수 설정
+        # t_path_change.clicked.connect(self.changeTargetDirFunc)
+        self.clickable(t_path_change).connect(lambda :self.changeDirFunc(1))
+        # add Empty Label for float:right 오른쪽 배치를 위해 빈 라벨 추가
+        head_hbox2.addWidget(self.target_dir_text, 4) 
+        head_hbox2.addWidget(t_path_change)
         
         # add Widget on Header Label 헤더 라벨에 위젯 추가
         lb_head.addWidget(lb_title)
-        lb_head.addWidget(self.dir_text)
+        # lb_head.addWidget(self.dir_text)
         lb_head.addLayout(head_hbox)
+        # lb_head.addWidget(self.target_dir_text)
+        lb_head.addLayout(head_hbox2)
         
         lb_head.setAlignment(Qt.AlignTop) # Header Label to top 헤더 라벨을 맨 위로 올리기
         
