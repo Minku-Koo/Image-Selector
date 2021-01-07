@@ -344,7 +344,7 @@ class ImageSelector(QWidget):
             f.write('\n')
         
         return 0
-    
+
     # New directory Open 디렉터리 새로 열기 / Parameter: source (0) OR target (1) <int>
     def changeDirFunc(self, where):
         if where==0: # source directory
@@ -353,7 +353,7 @@ class ImageSelector(QWidget):
         else: # target directory
             temp = self.target_path # original Directory Path
             orgDirText = self.target_dir_text.text() # original Label Text
-            
+        
         try:
             if where==0:
                 # Select Directory 폴더 선택창
