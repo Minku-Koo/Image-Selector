@@ -29,9 +29,7 @@
 ## HOW TO USE ?
 
 ### Start Interface
-<image width="400">
 ![main](https://user-images.githubusercontent.com/25974226/103170929-69589880-488b-11eb-9f57-995bdc2b5628.JPG)
-</image>
 ------------------------------------------------------------------------------
 
 ### Open Directory
