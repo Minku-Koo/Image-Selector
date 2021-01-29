@@ -694,13 +694,12 @@ class ImageSelector(QWidget):
         self.allLayout.addLayout(self.mainLayout, 3)
         self.setLayout(self.allLayout) 
         
-        
         self.show() # show GUI
         
     
 
 if __name__ == '__main__':
-    # START GUI
+    # START APP
     app = QApplication(sys.argv)
     ex = ImageSelector()
     sys.exit(app.exec_())
