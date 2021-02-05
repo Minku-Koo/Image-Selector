@@ -7,7 +7,7 @@
 - Updated Date : 06/Jan/2021
 - Author : Minku Koo
 - E-Mail : corleone@kakao.com
-- Version : 1.1.4
+- Version : 1.1.1
 - Keywords : 'PyQt5', 'Python', 'image', 'viewer', 'big data', 'gui', 'selector', 'classify'
 - Github URL : https://github.com/Minku-Koo/Image-Selector
 
