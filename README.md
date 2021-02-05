@@ -5,10 +5,10 @@
 
 * Project Name : Image File Selector (for make image Data-Set)
 * Created Date : 26/Dec/2020
-* Updated Date : 27/Dec/2020
+* Updated Date : 11/Jan/2021
 * Author : Minkuk Koo
 * E-Mail : corleone@kakao.com
-* Version : 1.0.1
+* Version : 1.1.0
 * Keyword : 'PyQt5', 'Python', 'image', 'viewer', 'big data', 'gui', 'selector', 'classify'
 
 <br>
