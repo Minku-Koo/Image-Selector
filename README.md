@@ -29,15 +29,30 @@
 ## HOW TO USE ?
 
 ### Start Interface
-![main](https://user-images.githubusercontent.com/25974226/103170929-69589880-488b-11eb-9f57-995bdc2b5628.JPG)
+![main](https://user-images.githubusercontent.com/25974226/107119394-9f495d80-68ca-11eb-9c95-a29e039b688b.JPG)
 ------------------------------------------------------------------------------
 
-### Open Directory
-![dirselect](https://user-images.githubusercontent.com/25974226/103170911-534ad800-488b-11eb-8a5b-e4f120905d8d.JPG)
+### Open Source Directory
+![source](https://user-images.githubusercontent.com/25974226/107119400-a3757b00-68ca-11eb-9693-956d800d6fb7.JPG)
+- set Target directory to Opened source directory
+------------------------------------------------------------------------------
+
+### Open Target Directory
+![target](https://user-images.githubusercontent.com/25974226/107119401-a40e1180-68ca-11eb-9c37-2da053a99ca5.JPG)
+- default Target directory : Source Directory
 ------------------------------------------------------------------------------
 
 ### You can classify file like this
-![allselect](https://user-images.githubusercontent.com/25974226/103170904-4928d980-488b-11eb-8616-78f935fe6e5f.JPG)
+![source](https://user-images.githubusercontent.com/25974226/107119400-a3757b00-68ca-11eb-9693-956d800d6fb7.JPG)
+
+1. Keyboard Pressed Event
+  - [W] : Up
+  - [S] : Down
+  - [Enter] : Correct
+  - [Shift] : Incorrect
+  
+1. Mouse Clicked Evect
+
 ------------------------------------------------------------------------------
 
 ### You can show image file using Image Viewer
@@ -65,6 +80,9 @@
 ------------------------------------------------------------------------------
 
 ### After you work..
+- make new (classified) directory in Target directory
+![targetdir](https://user-images.githubusercontent.com/25974226/107119402-a5d7d500-68ca-11eb-9ca9-d33725105a2b.JPG)
+
 ![done1](https://user-images.githubusercontent.com/25974226/103170920-62318a80-488b-11eb-9ecb-dcbcdb299ec7.JPG)
 
 + 'correct' and 'incorrect' directory is created.
