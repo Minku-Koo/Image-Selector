@@ -43,7 +43,7 @@
 ------------------------------------------------------------------------------
 
 ### You can classify file like this
-![source](https://user-images.githubusercontent.com/25974226/107119400-a3757b00-68ca-11eb-9693-956d800d6fb7.JPG)
+![select](https://user-images.githubusercontent.com/25974226/107119783-1ed82c00-68cd-11eb-96e9-8fbd75c37bff.JPG)
 
 1. Keyboard Pressed Event
   - [W] : Up
@@ -56,7 +56,7 @@
 ------------------------------------------------------------------------------
 
 ### If you push 'DONE' Button
-![keepworking](https://user-images.githubusercontent.com/25974226/107119642-4d093c00-68cc-11eb-85b2-36ccda9d1afe.JPG)
+![keepworking--](https://user-images.githubusercontent.com/25974226/107119784-1ed82c00-68cd-11eb-9fb3-0452b639a331.JPG)
 
 + If 'NO', Program finish..
 + If 'YES', you have to open another directory.
@@ -64,7 +64,7 @@
 
 ### If you push 'DONE' Button, before you do not classify all file..
 
-![not all select](https://user-images.githubusercontent.com/25974226/107119643-4e3a6900-68cc-11eb-94c8-4b4334c0705a.JPG)
+![not all select](https://user-images.githubusercontent.com/25974226/107119778-1d0e6880-68cd-11eb-8034-f0e8b4560ef8.JPG)
 
 + You can choose button what you want to work
 ------------------------------------------------------------------------------
