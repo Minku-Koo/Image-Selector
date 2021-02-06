@@ -14,11 +14,12 @@
 <br>
 
 - How to use?
-  > Select directory (Work Place)<br>
+  > Select Source directory (Work Place)<br>
+  > Select Target directory (Work Result Save Place, if you want)<br>
   > Classifying files on selected directory, correct or incorrect
 
 - it can Help you like this..
-  > When you classify image for getting data, you can use this usefully.<br>
+  > When you classify image for getting train data, you can use this usefully.<br>
   > Also, you can use these image data for AI.
 
 <br>
@@ -32,7 +33,7 @@
 ![main](https://user-images.githubusercontent.com/25974226/107119394-9f495d80-68ca-11eb-9c95-a29e039b688b.JPG)
 ------------------------------------------------------------------------------
 
-### Open Source Directory
+### Open Source Directory (if you want)
 ![source](https://user-images.githubusercontent.com/25974226/107119400-a3757b00-68ca-11eb-9693-956d800d6fb7.JPG)
 - set Target directory to Opened source directory
 ------------------------------------------------------------------------------
@@ -69,7 +70,6 @@
 + You can choose button what you want to work
 ------------------------------------------------------------------------------
 ------------------------------------------------------------------------------
-------------------------------------------------------------------------------
 ## RESERT
 
 ### Before you work..
@@ -77,13 +77,14 @@
 ------------------------------------------------------------------------------
 
 ### After you work..
-- make new (classified) directory in Target directory
+- make new (classified) directory on Target directory
 
 ![targetdir](https://user-images.githubusercontent.com/25974226/107119402-a5d7d500-68ca-11eb-9ca9-d33725105a2b.JPG)
 
++ 'correct' and 'incorrect' directory is created.
+
 ![done1](https://user-images.githubusercontent.com/25974226/103170920-62318a80-488b-11eb-9ecb-dcbcdb299ec7.JPG)
 
-+ 'correct' and 'incorrect' directory is created.
 ------------------------------------------------------------------------------
 
 ### on 'correct' directory
