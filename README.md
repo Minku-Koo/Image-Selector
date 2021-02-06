@@ -1,5 +1,5 @@
 # Image-Selector
-## Image Selector Program used PyQt5 GUI
+## Image Selector Program using PyQt5 GUI
 
 
 
@@ -33,12 +33,12 @@
 ![main](https://user-images.githubusercontent.com/25974226/107119394-9f495d80-68ca-11eb-9c95-a29e039b688b.JPG)
 ------------------------------------------------------------------------------
 
-### Open Source Directory (if you want)
+### Open Source Directory
 ![source](https://user-images.githubusercontent.com/25974226/107119400-a3757b00-68ca-11eb-9693-956d800d6fb7.JPG)
 - set Target directory to Opened source directory
 ------------------------------------------------------------------------------
 
-### Open Target Directory
+### Open Target Directory (if you want)
 ![target](https://user-images.githubusercontent.com/25974226/107119401-a40e1180-68ca-11eb-9c37-2da053a99ca5.JPG)
 - default Target directory : Source Directory
 ------------------------------------------------------------------------------
