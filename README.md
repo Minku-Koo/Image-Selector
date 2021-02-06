@@ -51,23 +51,20 @@
   - [Enter] : Correct
   - [Shift] : Incorrect
   
-1. Mouse Clicked Evect
+2. Mouse Clicked Evect
 
-------------------------------------------------------------------------------
-
-### You can show image file using Image Viewer
-![viewer](https://user-images.githubusercontent.com/25974226/103170935-71183d00-488b-11eb-9843-f113e8ca66e0.JPG)
 ------------------------------------------------------------------------------
 
 ### If you push 'DONE' Button
-![end](https://user-images.githubusercontent.com/25974226/103170925-678ed500-488b-11eb-92bf-f049569a895b.JPG)
+![keepworking](https://user-images.githubusercontent.com/25974226/107119642-4d093c00-68cc-11eb-85b2-36ccda9d1afe.JPG)
 
 + If 'NO', Program finish..
 + If 'YES', you have to open another directory.
 ------------------------------------------------------------------------------
 
 ### If you push 'DONE' Button, before you do not classify all file..
-![notyet](https://user-images.githubusercontent.com/25974226/103171229-cead8900-488d-11eb-926c-3c215307ecbd.JPG)
+
+![not all select](https://user-images.githubusercontent.com/25974226/107119643-4e3a6900-68cc-11eb-94c8-4b4334c0705a.JPG)
 
 + You can choose button what you want to work
 ------------------------------------------------------------------------------
@@ -81,6 +78,7 @@
 
 ### After you work..
 - make new (classified) directory in Target directory
+
 ![targetdir](https://user-images.githubusercontent.com/25974226/107119402-a5d7d500-68ca-11eb-9ca9-d33725105a2b.JPG)
 
 ![done1](https://user-images.githubusercontent.com/25974226/103170920-62318a80-488b-11eb-9ecb-dcbcdb299ec7.JPG)
@@ -88,11 +86,11 @@
 + 'correct' and 'incorrect' directory is created.
 ------------------------------------------------------------------------------
 
-### click 'correct' directory
+### on 'correct' directory
 ![file2](https://user-images.githubusercontent.com/25974226/103170928-68c00200-488b-11eb-914c-cb15cac7b153.JPG)
 ------------------------------------------------------------------------------
 
-### click 'incorrect' directory
+### on 'incorrect' directory
 ![file1](https://user-images.githubusercontent.com/25974226/103170927-68c00200-488b-11eb-8300-c77d3e3ee519.JPG)
 
 
