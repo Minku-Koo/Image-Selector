@@ -34,12 +34,12 @@
 ------------------------------------------------------------------------------
 
 ### Open Source Directory
-![source](https://user-images.githubusercontent.com/25974226/107119400-a3757b00-68ca-11eb-9693-956d800d6fb7.JPG)
+![source-d](https://user-images.githubusercontent.com/25974226/107153288-0987fe00-69b0-11eb-9b52-f9758d52a907.JPG)
 - set Target directory to Opened source directory
 ------------------------------------------------------------------------------
 
 ### Open Target Directory (if you want)
-![target](https://user-images.githubusercontent.com/25974226/107119401-a40e1180-68ca-11eb-9c37-2da053a99ca5.JPG)
+![target-d](https://user-images.githubusercontent.com/25974226/107153290-0ab92b00-69b0-11eb-990e-4ba0938de588.JPG)
 - default Target directory : Source Directory
 ------------------------------------------------------------------------------
 
