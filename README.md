@@ -17,8 +17,6 @@
 
 📌 Keyword : 'PyQt5', 'Python', 'image', 'viewer', 'big data', 'gui', 'selector', 'classify'
 
-<br>
-
 ------------------------------------------------------------------------------
 
 📢 How to simply use
@@ -31,6 +29,8 @@
 
   - When you classify image for getting train data, you can use this usefully.
   - Also, you can use these image data for AI train data set.
+ 
+------------------------------------------------------------------------------
 
 
 ## 💡 HOW TO USE ?
