@@ -90,9 +90,11 @@
 
 ### 🔍After you work..
 - make new (classified) directory on Target directory
+
 ![targetdir](https://user-images.githubusercontent.com/25974226/107119402-a5d7d500-68ca-11eb-9ca9-d33725105a2b.JPG)
 
-+ 'correct' and 'incorrect' directory is created.
+- 'correct' and 'incorrect' directory is created.
+
 ![done1](https://user-images.githubusercontent.com/25974226/103170920-62318a80-488b-11eb-9ecb-dcbcdb299ec7.JPG)
 
 ------------------------------------------------------------------------------
